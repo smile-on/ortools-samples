@@ -16,24 +16,13 @@ public class SimpleRoutingMultiVehicles {
     }
 
     public static void main(String[] args) throws Exception {
-        // 4 locations, a deport and 3 customers
-        int[][] costMatrix = new int[4][4];
-        costMatrix[0][0] = 0;
-        costMatrix[0][1] = 5;
-        costMatrix[0][2] = 3;
-        costMatrix[0][3] = 6;
-        costMatrix[1][0] = 5;
-        costMatrix[1][1] = 0;
-        costMatrix[1][2] = 8;
-        costMatrix[1][3] = 1;
-        costMatrix[2][0] = 3;
-        costMatrix[2][1] = 8;
-        costMatrix[2][2] = 0;
-        costMatrix[2][3] = 4;
-        costMatrix[3][0] = 6;
-        costMatrix[3][1] = 1;
-        costMatrix[3][2] = 4;
-        costMatrix[3][3] = 0;
+        // matrix over 4 locations, a deport and 3 customers
+        int[][] costMatrix = {
+                {0,5,3,6},
+                {5,0,8,1},
+                {3,8,0,4},
+                {6,1,4,0}
+        };
         // 2 vehicles with individual volume capacities
         long[] vehicleCaps = new long[2];
         vehicleCaps[0] = 2;
