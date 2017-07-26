@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ortools-samples.iml" filepath="$PROJECT_DIR$/.idea/ortools-samples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/protobuf/protobuf.iml" filepath="$PROJECT_DIR$/src/protobuf/protobuf.iml" />
     </modules>
   </component>
 </project>
