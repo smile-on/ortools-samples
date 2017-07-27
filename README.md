@@ -11,4 +11,4 @@ $ javac @options.arg src\samples\SimpleRoutingTest.java
 $ java -cp "out;lib\*" -Djava.library.path=lib\rt  samples.SimpleRoutingTest
 ```
 
-This java examples uses Google OR-TOOLS routing APIs v6.0 [Release 6.0.4217 of May 2017](https://github.com/google/or-tools/releases/tag/v6.0)
+This java examples uses Google OR-TOOLS routing APIs v6.2 [Release 6.2.4388](https://github.com/google/or-tools/releases/tag/v6.2)
