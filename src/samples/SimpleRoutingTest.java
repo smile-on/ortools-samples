@@ -1,4 +1,3 @@
-//package com.google.ortools.samples;
 package samples;
 
 import com.google.ortools.constraintsolver.Assignment;
@@ -7,19 +6,22 @@ import com.google.ortools.constraintsolver.RoutingModel;
 
 import java.util.ArrayList;
 
+/**
+ * Simplest search of a shortest path for single vehicle.
+ */
 public class SimpleRoutingTest {
-    //Static Add Library
+    // load OR library at run-time.
     static {
         System.loadLibrary("jniortools");
     }
 
     public static void main(String[] args) throws Exception {
-        // matrix over 4 locations, a deport and 3 customers
+        // matrix over 4 locations, a depot and 3 customers
         int[][] costMatrix = {
-                {0,5,3,6},
-                {5,0,8,1},
-                {3,8,0,4},
-                {6,1,4,0}
+                {0, 5, 3, 6},
+                {5, 0, 8, 1},
+                {3, 8, 0, 4},
+                {6, 1, 4, 0}
         };
         SimpleRoutingTest model = new SimpleRoutingTest(costMatrix);
         model.solve();
@@ -41,7 +43,6 @@ public class SimpleRoutingTest {
     //Solve Method
     public void solve() {
         RoutingModel routing = new RoutingModel(locationCount, 1, 0);
-//    routing.setFirstSolutionStrategy(RoutingModel.ROUTING_PATH_CHEAPEST_ARC);
         routing.setCost(distancesCallback);
 
         Assignment solution = routing.solve();

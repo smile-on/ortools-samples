@@ -7,28 +7,29 @@ import com.google.ortools.constraintsolver.RoutingModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-*/
+/**
+ * Split work between two vehicles in optimal way, shortest sum paths, respecting vehicle's capacity limit.
+ */
 public class SimpleRoutingMultiVehicles {
-    //Static Add Library
+    // load OR library at run-time.
     static {
         System.loadLibrary("jniortools");
     }
 
     public static void main(String[] args) throws Exception {
-        // matrix over 4 locations, a deport and 3 customers
+        // matrix over 4 locations, a depot and 3 customers
         int[][] costMatrix = {
-                {0,5,3,6},
-                {5,0,8,1},
-                {3,8,0,4},
-                {6,1,4,0}
+                {0, 5, 3, 6},
+                {5, 0, 8, 1},
+                {3, 8, 0, 4},
+                {6, 1, 4, 0}
         };
-        // 2 vehicles with individual volume capacities
-        long[] vehicleCaps = new long[2];
-        vehicleCaps[0] = 2;
-        vehicleCaps[1] = 3;
+        // 2 vehicles with individual volume capacities.
+        long[] vehicleCaps = {2, 2};
+        // 3 clients have same shipment volume (demand) of 1 unit and depot with no demand.
+        long[] shipmentVolume = {0, 1, 1, 1};
 
-        SimpleRoutingMultiVehicles model = new SimpleRoutingMultiVehicles(costMatrix, vehicleCaps);
+        SimpleRoutingMultiVehicles model = new SimpleRoutingMultiVehicles(costMatrix, vehicleCaps, shipmentVolume);
         model.solve();
         model.reportSolution();
     }
@@ -43,12 +44,12 @@ public class SimpleRoutingMultiVehicles {
     List<List<Integer>> globalRes;
     long globalResCost;
 
-    public SimpleRoutingMultiVehicles(int[][] costMatrix, long[] vehicleCaps) {
+    public SimpleRoutingMultiVehicles(int[][] costMatrix, long[] vehicleCaps, long[] shipmentVolume) {
         locationCount = costMatrix.length;
         distancesCallback = new NodeDistance(costMatrix);
         vehicleCount = vehicleCaps.length;
         volumeCaps = vehicleCaps;
-        volumeCallback = new NodeDemand();
+        volumeCallback = new NodeDemand(shipmentVolume);
     }
 
     //Solve Method
@@ -57,27 +58,26 @@ public class SimpleRoutingMultiVehicles {
         // optimization minimizes total distances traveled by all vehicles.
         routing.setCost(distancesCallback);
         // each node has demand, vehicle trip should have total demand less than capacity of the vehicle.
-        long slack_max = 0;
         boolean fix_start_cumul_to_zero = true;
-//        routing.addDimension(volumeCallback, 0, volumeCaps[0], fix_start_cumul_to_zero, "volume");  // cost 18 v[0]=2,v[1]=2
-        //todo fix EXCEPTION_ACCESS_VIOLATION
-        routing.addDimensionWithVehicleCapacity(volumeCallback, 0, volumeCaps, fix_start_cumul_to_zero, "volume"); // cost 13 v[0]=2,v[1]=3
+        routing.addDimensionWithVehicleCapacity(volumeCallback, 0, volumeCaps, fix_start_cumul_to_zero, "volume"); // test => cost 18 v[0]=2,v[1]=2
 
         Assignment solution = routing.solve();
-        if (solution == null) { // no solution
+        if (solution == null) {
+            // no solution
             globalResCost = 0;
             globalRes = null;
-            return;
-        }
-        globalResCost = solution.objectiveValue();
-        globalRes = new ArrayList();
-        for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles- 1
-            List<Integer> route = new ArrayList();
-            for (long node = routing.start(routeNumber); !routing.isEnd(node); node = solution.value(routing.nextVar(node))) {
-                int locationIndex = routing.IndexToNode(node); // note multi-vehicles report needs to get original node index
-                route.add(locationIndex);
+        } else {
+            // fetch information about solution found
+            globalResCost = solution.objectiveValue();
+            globalRes = new ArrayList();
+            for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles- 1
+                List<Integer> route = new ArrayList();
+                for (long node = routing.start(routeNumber); !routing.isEnd(node); node = solution.value(routing.nextVar(node))) {
+                    int locationIndex = routing.IndexToNode(node); // note multi-vehicles report needs to get original node index
+                    route.add(locationIndex);
+                }
+                globalRes.add(route);
             }
-            globalRes.add(route);
         }
     }
 
@@ -104,12 +104,15 @@ public class SimpleRoutingMultiVehicles {
 
     // Node Demand Evaluation
     static class NodeDemand extends NodeEvaluator2 {
+        long[] shipmentVolume;
+
+        public NodeDemand(long[] shipmentVolume) {
+            this.shipmentVolume = shipmentVolume;
+        }
+
         @Override
         public long run(int firstIndex, int secondIndex) {
-            if (secondIndex == 0)
-                return 0; // deport has no demand
-            else
-                return 1; // any client's location has demand of 1 unit
+            return shipmentVolume[secondIndex];
         }
     }
 }
