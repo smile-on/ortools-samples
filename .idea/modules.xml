@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ortools-samples.iml" filepath="$PROJECT_DIR$/.idea/ortools-samples.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/protobuf/protobuf.iml" filepath="$PROJECT_DIR$/src/protobuf/protobuf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples.iml" filepath="$PROJECT_DIR$/samples.iml" />
     </modules>
   </component>
 </project>
