@@ -17,6 +17,7 @@ public class SimpleRoutingMultiVehicles {
     }
 
     public static void main(String[] args) throws Exception {
+        // ** optimization objective is shortest sum of paths.
         // matrix over 4 locations, a depot and 3 customers
         int[][] costMatrix = {
                 {0, 5, 3, 6},
@@ -24,6 +25,7 @@ public class SimpleRoutingMultiVehicles {
                 {3, 8, 0, 4},
                 {6, 1, 4, 0}
         };
+        // ** add constraint on volume.
         // 2 vehicles with individual volume capacities.
         long[] vehicleCaps = {2, 2};
         // 3 clients have same shipment volume (demand) of 1 unit and depot with no demand.
