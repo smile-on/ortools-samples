@@ -15,7 +15,7 @@ These java examples use Google OR-TOOLS routing APIs v6.2 [Release 6.2.4388](htt
 
 Route map used in samples. ![map](./route-map.gif) 
 
-[SimpleRoutingTest](./blob/master/src/samples/SimpleRoutingTest.java) - simplest test. Search of a shortest path for single vehicle to go around all customers.
+[SimpleRoutingTest](./src/samples/SimpleRoutingTest.java) - simplest test. Search of a shortest path for single vehicle to go around all customers.
 
-[SimpleRoutingMultiVehicles](./blob/master/src/samples/SimpleRoutingMultiVehicles.java) - search for optimal solution with two vehicles.
+[SimpleRoutingMultiVehicles](./src/samples/SimpleRoutingMultiVehicles.java) - search for optimal solution with two vehicles.
 
