@@ -7,9 +7,11 @@ package samples;
 public class RoutingWithTimeTest {
 
     public static void main(String[] args) throws Exception {
+        // load OR library at run-time.
+        System.loadLibrary("jniortools");
         // ** optimization objective is shortest sum of paths.
         // matrix over 4 locations, a depot and 3 customers
-        int[][] costMatrix = {
+        int[][] distanceMatrix = {
                 {0, 5, 3, 6},
                 {5, 0, 8, 1},
                 {3, 8, 0, 4},
@@ -20,10 +22,14 @@ public class RoutingWithTimeTest {
         long[] vehicleCaps = {2, 2};
         // 3 clients have same shipment volume (demand) of 1 unit and depot with no demand.
         long[] shipmentVolume = {0, 1, 1, 1};
+        // 3 clients have time windows when service is accepted. Time is in logical units (your's to scale).
+        long[][] serviceTimes = {{0, 24}, {3, 7}, {3, 14}, {3, 7}}; // [client] [start, end]
 
-        RoutingProblem model = RoutingWithTime.create(costMatrix, vehicleCaps, shipmentVolume);
+        Routing model = new RoutingWithTime(distanceMatrix, vehicleCaps, shipmentVolume, serviceTimes);
         model.solve();
         model.printSolution();
+        // no time limitation =>  cost 18 solution [[0, 3, 1], [0, 2]]
+        // loc 3 and 1 are first priority in time => cost 23 solution [[0, 3, 2], [0, 1]]
     }
 
 

@@ -3,41 +3,18 @@ package samples;
 import com.google.ortools.constraintsolver.NodeEvaluator2;
 
 /**
- * Multi-vehicle Routing Model with basic constraints.
+ * Multi-vehicle Routing Model adds basic demand_at_node constraint.
  */
-public class RoutingBasic {
+public class RoutingBasic extends Routing {
+    static final String VOLUME_DIMENSION = "Volume";
 
-    static RoutingProblem create(int[][] costMatrix, long[] vehicleCaps, long[] shipmentVolume) {
-        // load OR library at run-time.
-        System.loadLibrary("jniortools");
+    RoutingBasic(int[][] distanceMatrix, long[] vehicleCaps, long[] shipmentVolume) {
         // problem definition holder
-        int locationCount = costMatrix.length;
-        int vehicleCount = vehicleCaps.length;
-        RoutingProblem routing = new RoutingProblem(locationCount, vehicleCount);
-
-        // optimization minimizes total distances traveled by all vehicles.
-        NodeEvaluator2 distancesCallback = new NodeDistance(costMatrix);
-        routing.setCost(distancesCallback);
+        super(distanceMatrix, vehicleCaps.length);
         // each node has demand, vehicle trip should have total demand less than capacity of the vehicle.
         NodeEvaluator2 volumeCallback = new NodeDemand(shipmentVolume);
         boolean fix_start_cumul_to_zero = true;
-        routing.addDimensionWithVehicleCapacity(volumeCallback, 0, vehicleCaps, fix_start_cumul_to_zero, "volume");
-        return routing;
-    }
-
-
-    // Node Distance Evaluation
-    static class NodeDistance extends NodeEvaluator2 {
-        private int[][] costMatrix;
-
-        public NodeDistance(int[][] costMatrix) {
-            this.costMatrix = costMatrix;
-        }
-
-        @Override
-        public long run(int firstIndex, int secondIndex) {
-            return costMatrix[firstIndex][secondIndex];
-        }
+        addDimensionWithVehicleCapacity(volumeCallback, 0, vehicleCaps, fix_start_cumul_to_zero, VOLUME_DIMENSION);
     }
 
     // Node Demand Evaluation

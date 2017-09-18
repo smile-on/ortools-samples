@@ -1,24 +1,30 @@
 package samples;
 
 import com.google.ortools.constraintsolver.Assignment;
+import com.google.ortools.constraintsolver.NodeEvaluator2;
 import com.google.ortools.constraintsolver.RoutingModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * API to solve RoutingProblem. Any specific RoutingModel uses it.
+ * API to solve Routing problem (VRP). Any specific RoutingModel extends it.
  */
-public class RoutingProblem extends RoutingModel {
+public class Routing extends RoutingModel {
 
     int locationCount, vehicleCount;
 
-    RoutingProblem(int locationCount, int vehicleCount) {
-        super(locationCount, vehicleCount, 0);
-        this.locationCount = locationCount;
+    Routing(int[][] distanceMatrix, int vehicleCount) {
+        super(distanceMatrix.length, vehicleCount, 0); // locationCount, vehicleCount
+        this.locationCount = distanceMatrix.length;
         this.vehicleCount = vehicleCount;
+        // optimization minimizes total distances traveled by all vehicles.
+        NodeEvaluator2 distancesCallback = new NodeDistance(distanceMatrix);
+        setCost(distancesCallback);
     }
 
+    // Google VRP format
+    Assignment solution;
     // solution in business terms
     long totalCost;
     List<List<Integer>> routes;
@@ -26,7 +32,7 @@ public class RoutingProblem extends RoutingModel {
     // Solve Method
     @Override
     public Assignment solve() {
-        Assignment solution = super.solve();
+        solution = super.solve();
         if (solution == null) {
             // no solution
             totalCost = 0;
@@ -52,5 +58,19 @@ public class RoutingProblem extends RoutingModel {
             System.out.println(String.format("no solution found"));
         else
             System.out.println(String.format("cost %d solution %s", totalCost, routes));
+    }
+
+    //  Distance Evaluation between from and to nodes.
+    static class NodeDistance extends NodeEvaluator2 {
+        private int[][] costMatrix;
+
+        public NodeDistance(int[][] costMatrix) {
+            this.costMatrix = costMatrix;
+        }
+
+        @Override
+        public long run(int fromNode, int toNode) {
+            return costMatrix[fromNode][toNode];
+        }
     }
 }
