@@ -28,8 +28,6 @@ public class RoutingWithTimeTest {
         Routing model = new RoutingWithTime(distanceMatrix, vehicleCaps, shipmentVolume, serviceTimes);
         model.solve();
         model.printSolution();
-        // no time limitation =>  cost 18 solution [[0, 3, 1], [0, 2]]
-        // loc 3 and 1 are first priority in time => cost 23 solution [[0, 3, 2], [0, 1]]
     }
 
 

@@ -13,9 +13,17 @@ These java examples use Google OR-TOOLS routing APIs v6.2 [Release 6.2.4388](htt
 
 ## Samples
 
-Route map used in samples. ![map](./route-map.gif) 
+The map of routes used in all samples. 
 
-[SimpleRoutingTest](./src/samples/SimpleRoutingTest.java) - simplest test. Search of a shortest path for single vehicle to go around all customers.
+![map](./route-map.gif) 
+
+[SimpleRoutingTest](./src/samples/SimpleRoutingTest.java) - simplest test. Search of a shortest path to go around all customers.
+
+There are no constraints => fully optimal route for single vehicle: **cost 13 solution [0, 2, 3, 1]**.
 
 [SimpleRoutingMultiVehicles](./src/samples/SimpleRoutingMultiVehicles.java) - search for optimal solution with two vehicles.
+
+Limitation on volume is added. Each vehicle can take up to 2 loads => optimal routes with work split between two vehicles:  **cost 18 solution [[0, 3, 1], [0, 2]]**.
+
+[RoutingWithTimeTest](./src/samples/RoutingWithTimeTest.java) -  search for optimal solution with time constraint. This demo is collection of Java classes that structures VRP problem into simple pieces. `Routing` implements simplest VRP. `RoutingBasic` adds volume constraint. `RoutingWithTime` adds time windows constraints. Locations 3 and 1 are set with first priority in service time => optimal routes became longer: **cost 23 solution [[0, 3, 2], [0, 1]]**.
 

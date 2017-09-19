@@ -7,10 +7,10 @@ import com.google.ortools.constraintsolver.RoutingDimension;
 /**
  * Multi-vehicle Routing Model with time-window constraints on service at each client location.
  * Google VRP library defines time dimension as the cumulative variable for each vehicle's route.
- * Here we define time constraint as the total time to arrive to the location to be within window.
- * Total time to arrive accumulates at each step, the service time at the previous location plus the travel time to the next location.
+ * Here we define time constraint as the total time to serve the location to be within window.
+ * Total time to serve accumulates at each step, the travel time to the location and service time.
  *
- * @see https://developers.google.com/optimization/routing/tsp/vehicle_routing_time_windows
+ * @see <a href="https://developers.google.com/optimization/routing/tsp/vehicle_routing_time_windows">vehicle routing with time windows</a>
  */
 public class RoutingWithTime extends RoutingBasic {
     static final String TIME_DIMENSION = "Time";
@@ -35,9 +35,10 @@ public class RoutingWithTime extends RoutingBasic {
         }
     }
 
-    // Evaluation of time to reach toNode = service before departure + travel time
+    // Evaluation of time to reach toNode = service + travel time
     static class TotalTimeCallback extends NodeEvaluator2 {
         long[][] travelTimes;
+        long serviceTime = 1; // all nodes have 1 unit as service time
 
         public TotalTimeCallback(int[][] distanceMatrix, long speed) {
             int locations = distanceMatrix.length;
@@ -49,14 +50,10 @@ public class RoutingWithTime extends RoutingBasic {
                 }
         }
 
-        public TotalTimeCallback(int[][] distanceMatrix) {
-        }
-
         @Override
         public long run(int fromNode, int toNode) {
-            long serviceTime = 1; // all nodes have 1 unit as service time
             long travelTime = travelTimes[fromNode][toNode];
-            return serviceTime + travelTime;
+            return travelTime + serviceTime;
         }
     }
 
