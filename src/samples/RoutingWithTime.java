@@ -13,47 +13,80 @@ import com.google.ortools.constraintsolver.RoutingDimension;
  * @see <a href="https://developers.google.com/optimization/routing/tsp/vehicle_routing_time_windows">vehicle routing with time windows</a>
  */
 public class RoutingWithTime extends RoutingBasic {
-    static final String TIME_DIMENSION = "Time";
+    static final String DEPART_TIME_DIMENSION = "DepartureTime";
+    static final String ARRIVAL_TIME_DIMENSION = "ArrivalTime";
 
-    RoutingWithTime(int[][] distanceMatrix, long[] vehicleCaps, long[] shipmentVolume, long[][] serviceTimes) {
+    RoutingWithTime(int[][] distanceMatrix, long[] vehicleCaps, long[] shipmentVolume,
+                    int[] servicingTime, long[][] serviceTimes) {
         super(distanceMatrix, vehicleCaps, shipmentVolume);
         // define time dimension
         long horizonTime = 24; // An upper bound for the accumulated time over each vehicle's route.
+        long maxWaiting = 4;   // un upper bound on time waiting for location window to open.
         long speed = 1;        // scale as you want
-        TotalTimeCallback totalTimeCallback = new RoutingWithTime.TotalTimeCallback(distanceMatrix, speed);
-        addDimension(totalTimeCallback,  // total time function callback
-                horizonTime, // slack max
+        ArrivalTimeCallback arrivalTimeCallback = new ArrivalTimeCallback(distanceMatrix, speed, servicingTime);
+        addDimension(arrivalTimeCallback, // time function callback
+                0,           // slack max
                 horizonTime, // vehicle capacity
                 true,        // fix_start_cumul_to_zero
-                TIME_DIMENSION);
+                ARRIVAL_TIME_DIMENSION);
+        DepartureTimeCallback departureTimeCallback = new DepartureTimeCallback(arrivalTimeCallback, servicingTime);
+        addDimension(departureTimeCallback,  // time function callback
+                0,           // slack max
+                horizonTime, // vehicle capacity
+                true,        // fix_start_cumul_to_zero
+                DEPART_TIME_DIMENSION);
         // add constraints in time dimension via cumulative var
-        RoutingDimension time = getDimensionOrDie(TIME_DIMENSION);
+        RoutingDimension enterTime = getDimensionOrDie(ARRIVAL_TIME_DIMENSION);
+        RoutingDimension exitTime = getDimensionOrDie(DEPART_TIME_DIMENSION);
         int locations = distanceMatrix.length;
-        for (int location = 1; location < locations; location++) {
+        // Note TW constraints for depot(#0) is ignored by google library, use horizonTime instead
+        for (int location = 0; location < locations; location++) {
             int start = 0, end = 1;
-            time.cumulVar(location).setRange(serviceTimes[location][start], serviceTimes[location][end]);
+            enterTime.cumulVar(location).setRange(serviceTimes[location][start], serviceTimes[location][end]);
+            exitTime.cumulVar(location).setRange(serviceTimes[location][start], serviceTimes[location][end]);
         }
     }
 
-    // Evaluation of time to reach toNode = service + travel time
-    static class TotalTimeCallback extends NodeEvaluator2 {
-        long[][] travelTimes;
-        long serviceTime = 1; // all nodes have 1 unit as service time
+    // Evaluation of time to reach toNode = travel time
+    static class ArrivalTimeCallback extends NodeEvaluator2 {
+        long[][] times;
 
-        public TotalTimeCallback(int[][] distanceMatrix, long speed) {
+        public ArrivalTimeCallback(int[][] distanceMatrix, long speed, int[] serviceTimes) {
             int locations = distanceMatrix.length;
-            travelTimes = new long[locations][locations];
+            times = new long[locations][locations];
 
             for (int i = 0; i < locations; i++)
                 for (int j = 0; j < locations; j++) {
-                    travelTimes[i][j] = distanceMatrix[i][j] / speed;
+                    int serviceBeforeDeparture = serviceTimes[i];
+                    long travelTime = distanceMatrix[i][j] / speed;
+                    times[i][j] = serviceBeforeDeparture + travelTime;
                 }
         }
 
         @Override
         public long run(int fromNode, int toNode) {
-            long travelTime = travelTimes[fromNode][toNode];
-            return travelTime + serviceTime;
+            return times[fromNode][toNode];
+        }
+    }
+
+    // Evaluation of time to exit toNode = service + travel time
+    static class DepartureTimeCallback extends NodeEvaluator2 {
+        long[][] times;
+
+        public DepartureTimeCallback(ArrivalTimeCallback arrivalTimeCallback, int[] serviceTimes) {
+            int locations = serviceTimes.length;
+            times = new long[locations][locations];
+
+            for (int i = 0; i < locations; i++)
+                for (int j = 0; j < locations; j++) {
+                    long exitTime = arrivalTimeCallback.run(i, j) + serviceTimes[j];
+                    times[i][j] = exitTime;
+                }
+        }
+
+        @Override
+        public long run(int fromNode, int toNode) {
+            return times[fromNode][toNode];
         }
     }
 
@@ -61,16 +94,19 @@ public class RoutingWithTime extends RoutingBasic {
     @Override
     public void printSolution() {
         super.printSolution();
-        RoutingDimension time = getDimensionOrDie(TIME_DIMENSION);
-        for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles- 1
-            StringBuffer report = new StringBuffer();
+        RoutingDimension enterTime = getDimensionOrDie(ARRIVAL_TIME_DIMENSION);
+        RoutingDimension exitTime = getDimensionOrDie(DEPART_TIME_DIMENSION);
+        for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles-1
+            StringBuffer itinerary = new StringBuffer();
             for (long node = start(routeNumber); !isEnd(node); node = solution.value(nextVar(node))) {
                 int locationIndex = IndexToNode(node); // note multi-vehicles report needs to get original node index
-                IntVar timeVar = time.cumulVar(node);
-                report.append(String.format("@%d time %d{%d-%d} ", locationIndex, solution.value(timeVar),
-                        timeVar.min(), timeVar.max()));
+                IntVar enterTimeVar = enterTime.cumulVar(node);
+                IntVar exitTimeVar = exitTime.cumulVar(node);
+                itinerary.append(String.format("@%d[%d-%d]{%d-%d} ", locationIndex,
+                        solution.value(enterTimeVar), solution.value(exitTimeVar),
+                        enterTimeVar.min(), exitTimeVar.max()));
             }
-            System.out.println(String.format("route %d %s", routeNumber, report));
+            System.out.println(String.format("route#%d %s", routeNumber, itinerary));
         }
     }
 
