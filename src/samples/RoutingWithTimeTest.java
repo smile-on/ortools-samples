@@ -25,11 +25,14 @@ public class RoutingWithTimeTest {
         // 3 clients have same shipment volume (demand) of 1 unit and depot with no demand.
         long[] shipmentVolume = {0, 1, 1, 1};
         // 3 clients have time windows when service is accepted. Time is in logical units (your's to scale).
-        long[][] serviceTimeWindows = {{0, 10}, {3, 7}, {3, 14}, {3, 7}}; // [client] [start, end]
+        long[][] serviceTimeWindows = {{0, 10}, {3, 7}, {13, 18}, {3, 7}}; // [client] [start, end]
 
         Routing model = new RoutingWithTime(distanceMatrix, vehicleCaps, shipmentVolume, servicingTime, serviceTimeWindows);
         model.solve();
         model.printSolution();
+        // Note a model uses two time dimensions to account for arrival and departure time has hard time to account for
+        // wait time represented as slack variable in one or both dimensions.
+        // route#0 @0[0-0]{0-0} @3[6-7]{3-7} @2[13-13]{13-18}
     }
 
 

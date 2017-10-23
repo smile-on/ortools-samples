@@ -10,6 +10,7 @@ import com.google.ortools.constraintsolver.RoutingDimension;
  * Here we define time constraint as the total time to serve the location to be within window.
  * Total time to serve accumulates at each step, the travel time to the location and service time.
  *
+ * Uses two time dimensions to account for arrival and departure time.
  * @see <a href="https://developers.google.com/optimization/routing/tsp/vehicle_routing_time_windows">vehicle routing with time windows</a>
  */
 public class RoutingWithTime extends RoutingBasic {
@@ -25,13 +26,13 @@ public class RoutingWithTime extends RoutingBasic {
         long speed = 1;        // scale as you want
         ArrivalTimeCallback arrivalTimeCallback = new ArrivalTimeCallback(distanceMatrix, speed, servicingTime);
         addDimension(arrivalTimeCallback, // time function callback
-                0,           // slack max
+                maxWaiting,           // slack max
                 horizonTime, // vehicle capacity
                 true,        // fix_start_cumul_to_zero
                 ARRIVAL_TIME_DIMENSION);
         DepartureTimeCallback departureTimeCallback = new DepartureTimeCallback(arrivalTimeCallback, servicingTime);
         addDimension(departureTimeCallback,  // time function callback
-                0,           // slack max
+                maxWaiting,           // slack max
                 horizonTime, // vehicle capacity
                 true,        // fix_start_cumul_to_zero
                 DEPART_TIME_DIMENSION);
