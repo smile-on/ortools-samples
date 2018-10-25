@@ -6,4 +6,4 @@ out
 hs_err_pid*
 
 # IDE files
-*.iml
+# *.iml

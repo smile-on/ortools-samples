@@ -1,4 +1,4 @@
-package samples;
+package routing;
 
 import com.google.ortools.constraintsolver.Assignment;
 import com.google.ortools.constraintsolver.NodeEvaluator2;

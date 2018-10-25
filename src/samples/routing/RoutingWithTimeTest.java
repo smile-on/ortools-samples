@@ -1,4 +1,4 @@
-package samples;
+package routing;
 
 /**
  * Split work between two vehicles in optimal way, shortest sum paths, respecting vehicle's capacity limit.
