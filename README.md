@@ -1,6 +1,6 @@
 # OR-Tools Samples
 
-Java is not favorite language among supported by [Google's or-tools project](https://developers.google.com/optimization/). This repo is a collection of `Java` samples to facilitate learning of or-tools project. The or-tools project source code has more Java samples in main [or-tools github repository](https://github.com/google/or-tools/tree/master/examples/com/google/ortools/samples).
+Java is not favorite language among supported by [Google's or-tools project](https://developers.google.com/optimization/). This repo is a collection of `Java` samples to facilitate learning of or-tools project. The or-tools project source code has more [Java examples in github repository](https://github.com/google/or-tools/tree/master/examples/java).
 
 ## Running samples
 Users are welcome to use IDE of their choice but any sample in this repository can be run by command line:
