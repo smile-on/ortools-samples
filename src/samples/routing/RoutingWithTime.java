@@ -100,7 +100,7 @@ public class RoutingWithTime extends RoutingBasic {
         for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles-1
             StringBuffer itinerary = new StringBuffer();
             for (long node = start(routeNumber); !isEnd(node); node = solution.value(nextVar(node))) {
-                int locationIndex = IndexToNode(node); // note multi-vehicles report needs to get original node index
+                int locationIndex = indexToNode(node); // note multi-vehicles report needs to get original node index
                 IntVar enterTimeVar = enterTime.cumulVar(node);
                 IntVar exitTimeVar = exitTime.cumulVar(node);
                 itinerary.append(String.format("@%d[%d-%d]{%d-%d} ", locationIndex,

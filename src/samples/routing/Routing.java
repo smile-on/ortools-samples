@@ -44,7 +44,7 @@ public class Routing extends RoutingModel {
             for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles- 1
                 List<Integer> route = new ArrayList();
                 for (long node = start(routeNumber); !isEnd(node); node = solution.value(nextVar(node))) {
-                    int locationIndex = IndexToNode(node); // note multi-vehicles report needs to get original node index
+                    int locationIndex = indexToNode(node); // note multi-vehicles report needs to get original node index
                     route.add(locationIndex);
                 }
                 routes.add(route);

@@ -75,7 +75,7 @@ public class SimpleRoutingMultiVehicles {
             for (int routeNumber = 0; routeNumber < vehicleCount; routeNumber++) { // from 0 to vehicles- 1
                 List<Integer> route = new ArrayList();
                 for (long node = routing.start(routeNumber); !routing.isEnd(node); node = solution.value(routing.nextVar(node))) {
-                    int locationIndex = routing.IndexToNode(node); // note multi-vehicles report needs to get original node index
+                    int locationIndex = routing.indexToNode(node); // note multi-vehicles report needs to get original node index
                     route.add(locationIndex);
                 }
                 globalRes.add(route);
