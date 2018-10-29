@@ -5,8 +5,13 @@ Java is not favorite language among supported by [Google's or-tools project](htt
 ## Running samples
 Users are welcome to use IDE of their choice but any sample in this repository can be run by command line:
 ```shell
-$ javac @options.arg src\samples\routing\SimpleRoutingTest.java
-$ java -cp "out;lib\*" -Djava.library.path=lib\rt  routing.SimpleRoutingTest
+$ javac @options.arg src/samples/routing/SimpleRoutingTest.java
+$ java -cp 'out:lib/*' -Djava.library.path=lib/rt  routing.SimpleRoutingTest
+```
+
+```cmd
+> javac @options.arg src\samples\routing\SimpleRoutingTest.java
+> java -cp "out;lib\*" -Djava.library.path=lib\rt  routing.SimpleRoutingTest
 ```
 
 These java examples use Google OR-TOOLS routing APIs v6.9 [Release 6.9.5762](https://github.com/google/or-tools/releases/tag/v6.9). Notes v6.9 requires minimum Java 9.
