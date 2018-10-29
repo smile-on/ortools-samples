@@ -17,7 +17,7 @@ $ java -cp 'out:lib/*' -Djava.library.path=lib/rt  routing.SimpleRoutingTest
 These java examples use Google OR-TOOLS routing APIs v6.9 [Release 6.9.5762](https://github.com/google/or-tools/releases/tag/v6.9). Notes v6.9 requires minimum Java 9.
 
 ## Samples
-
+### VRP problem
 The map of routes used in all samples. 
 
 ![map](./route-map.gif) 
@@ -32,3 +32,5 @@ Limitation on volume is added. Each vehicle can take up to 2 loads => optimal ro
 
 [RoutingWithTimeTest](./src/samples/routing/RoutingWithTimeTest.java) -  search for optimal solution with time constraint. This demo is collection of Java classes that structures VRP problem into simple pieces. `Routing` implements simplest VRP. `RoutingBasic` adds volume constraint. `RoutingWithTime` adds time windows constraints. Locations 3 and 1 are set with first priority in service time => optimal routes became longer: **cost 23 solution [[0, 3, 2], [0, 1]]**.
 
+### MIP problem
+Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using ortools build-in CBC solver.
