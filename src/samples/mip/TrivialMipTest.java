@@ -65,8 +65,9 @@ public class TrivialMipTest {
         if (status != OPTIMAL) {
             System.err.println("The problem does not have an optimal solution!");
         } else {
-            System.out.println("Optimal objective value = " + solver.objective().value());
-            System.out.printf("Item quantities: x=%d y=%d z=%d \n",
+            System.out.println("Expected obj=35 : x=7 y=3 z=5");
+            System.out.printf("  obj=%f : x=%d y=%d z=%d \n",
+                    solver.objective().value(),
                     (int)x.solutionValue(), (int)y.solutionValue(), (int)z.solutionValue());
         }
     }
