@@ -34,5 +34,6 @@ Limitation on volume is added. Each vehicle can take up to 2 loads => optimal ro
 
 ### MIP problem
 Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using ortools build-in **CBC** solver.
+
 Using MIP wrapper around SAT solver: [Knapsack MIP](./src/samples/mip/KnapsackBOP.java) problem solution using ortools build-in **BOP-SAT** solver.
 
