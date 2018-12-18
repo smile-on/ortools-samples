@@ -37,3 +37,5 @@ Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using ortools build
 
 Using MIP wrapper around SAT solver: [Knapsack MIP](./src/samples/mip/KnapsackBOP.java) problem solution using ortools build-in **BOP-SAT** solver.
 
+Solving MIP close to optimality [Multi Knapsack MIP](./src/samples/mip/KnapsackMBOP.java) when optimality is out of reach by the solver.
+Note extra constraint that assigns one item per bin that compromises optimality to reduce search space.
