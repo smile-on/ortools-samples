@@ -21,7 +21,7 @@ public class SimpleCpModelTest {
         // subject to the linear constraints
     }
 
-    /*todo upgrade 6.10 release to get fix of missed SAT API
+    /*
 https://github.com/google/or-tools/blob/master/ortools/sat/samples/BinPackingProblem.java
 
     IntVar boolvar = model.NewBoolVar("boolvar");

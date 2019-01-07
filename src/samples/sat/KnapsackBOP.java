@@ -11,7 +11,7 @@ import static com.google.ortools.linearsolver.MPSolver.ResultStatus.OPTIMAL;
 /**
  * Trivial Knapsak problem solution using the OR-TOOLS BOP-SAT solver.
  */
-public class KnapsakBOP {
+public class KnapsackBOP {
 
     public static void main(String[] args) throws Exception {
         // load OR library at run-time.
