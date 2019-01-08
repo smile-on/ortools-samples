@@ -42,6 +42,6 @@ Note extra constraint that assigns one item per bin that compromises optimality 
 
 ### CP-SAT solver
 
-[CP-SAT solver](https://developers.google.com/optimization/cp/cp_solver)
-todo [trivial]
-todo [Multi Knapsack MIP]
+Solving [trivial MIP as CP](./src/samples/sat/SimpleCpModelTest.java) using Google [CP-SAT solver](https://developers.google.com/optimization/cp/cp_solver)
+
+todo [Multi Knapsack CP]

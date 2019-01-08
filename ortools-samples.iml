@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="google-ortools-6.10.6025" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="protobuf-6.10.6025" level="project" />
+    <orderEntry type="library" name="protobuf-6.10.6025" level="project" />
   </component>
 </module>
