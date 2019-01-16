@@ -46,4 +46,4 @@ Solving [trivial MIP as CP](./src/samples/sat/SimpleCpModelTest.java) using Goog
 
 Using CP wrapper around SAT solver: [Knapsack SAT](./src/samples/sat/KnapsackSAT.java) problem solution using ortools build-in **CP-SAT** solver.
 
-Todo [Multi Knapsack CP]
+Example [Multi Knapsack CP](./src/samples/sat/KnapsackMSAT.java).
