@@ -33,13 +33,17 @@ Limitation on volume is added. Each vehicle can take up to 2 loads => optimal ro
 [RoutingWithTimeTest](./src/samples/routing/RoutingWithTimeTest.java) -  search for optimal solution with time constraint. This demo is collection of Java classes that structures VRP problem into simple pieces. `Routing` implements simplest VRP. `RoutingBasic` adds volume constraint. `RoutingWithTime` adds time windows constraints. Locations 3 and 1 are set with first priority in service time => optimal routes became longer: **cost 23 solution [[0, 3, 2], [0, 1]]**.
 
 ### MIP solver
-Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using ortools build-in **CBC** solver.
+Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using or-tools build-in **CBC** solver. 
+
 Using MIP wrapper around SAT solver: [Knapsack MIP](./src/samples/mip/KnapsackBOP.java) problem solution using ortools build-in **BOP-SAT** solver.
+
 Solving MIP close to optimality [Multi Knapsack MIP](./src/samples/mip/KnapsackMBOP.java) when optimality is out of reach by the solver.
 Note extra constraint that assigns one item per bin that compromises optimality to reduce search space.
 
 ### CP-SAT solver
 
 Solving [trivial MIP as CP](./src/samples/sat/SimpleCpModelTest.java) using Google [CP-SAT solver](https://developers.google.com/optimization/cp/cp_solver).
+
 Using CP wrapper around SAT solver: [Knapsack SAT](./src/samples/sat/KnapsackSAT.java) problem solution using ortools build-in **CP-SAT** solver.
+
 Todo [Multi Knapsack CP]
