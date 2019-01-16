@@ -44,7 +44,8 @@ public class SimpleCpModelTest {
 
         // Creates the solver and solve.
         CpSolver solver = new CpSolver();
-        // solver.getParameters()
+        double ms = 10 / 1000.0;
+        solver.getParameters().setMaxTimeInSeconds(ms);
         CpSolverStatus status = solver.solve(model);
         // display solution
         boolean hasSolution = (status == OPTIMAL || status == FEASIBLE);

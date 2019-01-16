@@ -34,14 +34,12 @@ Limitation on volume is added. Each vehicle can take up to 2 loads => optimal ro
 
 ### MIP solver
 Solving [trivial MIP](./src/samples/mip/TrivialMipTest.java) using ortools build-in **CBC** solver.
-
 Using MIP wrapper around SAT solver: [Knapsack MIP](./src/samples/mip/KnapsackBOP.java) problem solution using ortools build-in **BOP-SAT** solver.
-
 Solving MIP close to optimality [Multi Knapsack MIP](./src/samples/mip/KnapsackMBOP.java) when optimality is out of reach by the solver.
 Note extra constraint that assigns one item per bin that compromises optimality to reduce search space.
 
 ### CP-SAT solver
 
-Solving [trivial MIP as CP](./src/samples/sat/SimpleCpModelTest.java) using Google [CP-SAT solver](https://developers.google.com/optimization/cp/cp_solver)
-
-todo [Multi Knapsack CP]
+Solving [trivial MIP as CP](./src/samples/sat/SimpleCpModelTest.java) using Google [CP-SAT solver](https://developers.google.com/optimization/cp/cp_solver).
+Using CP wrapper around SAT solver: [Knapsack SAT](./src/samples/sat/KnapsackSAT.java) problem solution using ortools build-in **CP-SAT** solver.
+Todo [Multi Knapsack CP]
