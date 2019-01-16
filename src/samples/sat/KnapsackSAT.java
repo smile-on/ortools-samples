@@ -1,14 +1,12 @@
 package sat;
 
-import com.google.ortools.linearsolver.MPConstraint;
-import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.sat.CpModel;
 import com.google.ortools.sat.CpSolver;
 import com.google.ortools.sat.CpSolverStatus;
 import com.google.ortools.sat.IntVar;
 
-import static com.google.ortools.linearsolver.MPSolver.ResultStatus.OPTIMAL;
 import static com.google.ortools.sat.CpSolverStatus.FEASIBLE;
+import static com.google.ortools.sat.CpSolverStatus.OPTIMAL;
 
 /**
  * Trivial Knapsak problem solution using the OR-TOOLS CP-SAT solver.
@@ -47,15 +45,15 @@ public class KnapsackSAT {
         CpSolverStatus status = solver.solve(model);
 
         // show solution
-        boolean hasSolution = (status == CpSolverStatus.OPTIMAL || status == FEASIBLE);
+        boolean hasSolution = (status == OPTIMAL || status == FEASIBLE);
         if (hasSolution) {
-            if (status != CpSolverStatus.OPTIMAL)
+            if (status != OPTIMAL)
                 System.err.println("solution is not an optimal.");
 
             System.out.println("Expected obj=21777 : x[0]=1 x[1]=1 x[2]=0 x[3]=0 x[4]=1 x[5]=0 x[6]=0 x[7]=0 x[8]=1 x[9]=1 .");
-            System.out.printf("Fact     obj=%d : ", (int)solver.objectiveValue());
+            System.out.printf("Fact     obj=%d : ", (int) solver.objectiveValue());
             for (int i = 0; i < items; i++)
-                System.out.printf("x[%d]=%d ", i, (int)solver.value(x[i]));
+                System.out.printf("x[%d]=%d ", i, (int) solver.value(x[i]));
             System.out.println(".");
         } else {
             System.err.println("The problem does not have solution. " + status);
