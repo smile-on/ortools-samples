@@ -44,7 +44,7 @@ public class KnapsackMSAT {
 
 
     CpModel model; // in CP-SAT format
-    double timeoutSeconds = 10; // cp is faster to first solution but MIP got to better quality faster for now.
+    double timeoutSeconds = 3; // cp is faster to first solution but MIP got to better quality faster for now.
 
     void formulate() {
         model = new CpModel();
@@ -76,6 +76,11 @@ public class KnapsackMSAT {
                 chosenBin[b] = x[b][i];
             }
             model.addLinearSum(chosenBin, 0, 1);
+        }
+        // break symmetry by eliminating search space on symmetrical solutions
+        // fact - just makes solver slower
+        for (int b = 1; b < numBins; b++) {
+            model.addLessOrEqual(binValue[b], binValue[b - 1]);
         }
     }
 
