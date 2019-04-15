@@ -1,9 +1,6 @@
 package sat;
 
-import com.google.ortools.sat.CpModel;
-import com.google.ortools.sat.CpSolver;
-import com.google.ortools.sat.CpSolverStatus;
-import com.google.ortools.sat.IntVar;
+import com.google.ortools.sat.*;
 
 import static com.google.ortools.sat.CpSolverStatus.FEASIBLE;
 import static com.google.ortools.sat.CpSolverStatus.OPTIMAL;
@@ -87,7 +84,10 @@ public class KnapsackMSAT {
 
     void solve() {
         CpSolver solver = new CpSolver();
-        solver.getParameters().setMaxTimeInSeconds(timeoutSeconds);
+        SatParameters.Builder parameters = solver.getParameters();
+        parameters.setMaxTimeInSeconds(timeoutSeconds);
+        parameters.setLogSearchProgress(true); // Whether the solver should log the search progress to stderr.
+
         CpSolverStatus status = solver.solve(model);
 
         // show solution
@@ -103,6 +103,10 @@ public class KnapsackMSAT {
             System.err.println("The problem does not have solution. " + status);
         }
         System.out.println("\n\nexecution stats \n" + solver.responseStats());
+        // cp-sat logging is in stderr output of the protobuf of the model.
+        // with setLogSearchProgress(true) The logger will be stderr as we reuse the glog library.
+        // This will eventually become release 7.1
+        // https://groups.google.com/forum/#!topic/or-tools-discuss/CEdRanlYa0o
     }
 
 
