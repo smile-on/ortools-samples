@@ -21,6 +21,11 @@ Fact     obj =191673 : bins=9 time=10 solution is not an optimal.
 Expected obj>=217770
 bins=10 The problem does not have solution. UNKNOWN
 
+        // Formulation with "Row Generation" like decomposition.
+        // Is really bad it uses 9,870 vars for 10 bins instead of assigning intermediate variable.
+        Classical formulation 10 bins got 1,000 vars.
+        10 bins solved in 3 sec
+        11 bins - no solution
      */
     public static void main(String[] args) throws Exception {
         // load OR library at run-time.
@@ -38,6 +43,10 @@ bins=10 The problem does not have solution. UNKNOWN
         test2(9, 3);
         test2(9, 10);
         test2(10, 10);
+        // Formulation with "Row Generation" like decomposition.
+        // Is very weak as well
+        test3(10, 3);
+        test3(11, 3);
     }
 
     static void test1(int numBins, double timeoutSeconds) {
@@ -49,6 +58,13 @@ bins=10 The problem does not have solution. UNKNOWN
 
     static void test2(int numBins, double timeoutSeconds) {
         KnapsackMSat problem = new KnapsackMSat2(numBins, timeoutSeconds);
+        problem.scaleData();
+        problem.formulate();
+        problem.solve();
+    }
+
+    static void test3(int numBins, double timeoutSeconds) {
+        KnapsackMSat problem = new KnapsackMSat3(numBins, timeoutSeconds);
         problem.scaleData();
         problem.formulate();
         problem.solve();
